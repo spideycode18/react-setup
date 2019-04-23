@@ -1,0 +1,148 @@
+https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#table-of-contents
+
+https://www.valentinog.com/blog/react-webpack-babel/
+
+https://medium.freecodecamp.org/part-1-react-app-from-scratch-using-webpack-4-562b1d231e75
+
+https://medium.com/a-beginners-guide-for-webpack-2/using-sass-9f52e447c5ae
+
+
+
+1. Install node
+
+2.
+	npm install -g create-react-app
+	create-react-app react-webpack
+	npm run start 
+3.
+
+	npm install webpack webpack-cli --save-dev 
+4.
+	npm install babel-core babel-loader babel-preset-env babel-preset-react --save-dev
+
+	create file .babelrc with
+	{
+	  "presets": ["env", "react"]
+	}
+
+	create webpack.config.js with
+
+	module.exports = {
+	  module: {
+	    rules: [
+	      {
+	        test: /\.js$/,
+	        exclude: /node_modules/,
+	        use: {
+	          loader: "babel-loader"
+	        }
+	      }
+	    ]
+	  }
+	};
+5.
+	npm install html-webpack-plugin --save-dev
+
+	update webpack.config.js with
+
+	const HtmlWebPackPlugin = require("html-webpack-plugin");
+
+	module.exports = {
+	  module: {
+	    rules: [
+	      {
+	        test: /\.js$/,
+	        exclude: /node_modules/,
+	        use: {
+	          loader: "babel-loader"
+	        }
+	      }
+	    ]
+	  },
+	  plugins: [
+	    new HtmlWebPackPlugin({
+	      template: "./public/index.html",
+	      filename: "./index.html"
+	    })
+	  ]
+	};
+6.
+	npm install webpack-dev-server --save-dev
+
+	update package.json
+
+	"start": "webpack-dev-server --mode development --open",
+  "build": "webpack --mode production"
+
+  delete "react-scripts": "1.1.4"
+
+  update webpack.config.js with
+
+  const path = require('path');
+
+	devServer: {
+    contentBase: path.join(__dirname, "public"),
+    compress: true,
+    port: 8000
+  }
+7. 
+
+	npm install css-loader style-loader sass-loader node-sass file-loader --save-dev
+
+	update webpack.config.js with
+
+	const HtmlWebPackPlugin = require("html-webpack-plugin");
+	const path = require('path');
+
+	module.exports = {
+	  module: {
+	    rules: [
+	      {
+	        test: /\.(js|jsx)$/,
+	        use: ['babel-loader'],
+	        exclude: /node_modules/,
+	      },
+	      {
+	        test: /\.(scss|css)$/,
+	        use: [{
+	          loader: "style-loader" // creates style nodes from JS strings
+	        }, {
+	          loader: "css-loader" // translates CSS into CommonJS
+	        }, {
+	          loader: "sass-loader" // compiles Sass to CSS
+	        }]
+	      },
+	      {
+	        test: /\.(jpe?g|png|gif|svg|ttf|eot|woff|woff2)$/i,
+	        use: [
+	          {
+	            loader: 'file-loader',
+	          },
+	        ]
+	      }
+	    ]
+	  },
+	  plugins: [
+	    new HtmlWebPackPlugin({
+	      template: "./public/index.html",
+	      filename: "./index.html"
+	    })
+	  ],
+	  devServer: {
+	    contentBase: path.join(__dirname, "public"),
+	    compress: true,
+	    port: 8000,
+	    historyApiFallback: true //When using the HTML5 History API, the index.html page will likely have to be served in place of any 404 responses.
+	  }
+	};
+8.
+	change HTML 
+
+	<link rel="manifest" href="./manifest.json">
+  <link rel="shortcut icon" href="./favicon.ico">
+
+9. change 
+	index.css => index.scss
+	fix impport in index.js 
+	import './index.css'; -> import './index.scss';
+	to check
